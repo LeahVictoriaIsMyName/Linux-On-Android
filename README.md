@@ -8,7 +8,7 @@ On this page, you will learn to run Linux on Android easily
 *  [How to install a distro without root(#proot-distributions)
 *  [How to install Chroot distributions](#chroot-distributions)
 *  [How to install Termux Native Desktop](#termux-native)
-*  [Hardware acceleration in Termux](https://github.com/LinuxDroidMaster/Termux-Desktops/blob/main/Documentation/HardwareAcceleration.md)
+*  [Hardware acceleration in Termux](https://github.com/LeahVictoriaIsMyName/Linux-On-Android/blob/main/Documentation/TurnipHardware.md)
 
 <br>
 <br>  
