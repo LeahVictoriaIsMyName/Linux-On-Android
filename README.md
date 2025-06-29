@@ -47,6 +47,7 @@ pkg install pulseaudio
 pkg install proot-distro
 pkg install wget
 pkg install git
+pkg install mesa-zink virglrenderer-mesa-zink vulkan-loader-android virglrenderer-android
 ```
 
 ---  
