@@ -1,0 +1,52 @@
+echo "No-Login Login Manager"
+echo "Termux login manager"
+echo ""
+echo "Username: "
+read USR
+#echo "What desktop enviroment do you want to run?"
+#echo "Valid options are:"
+#echo "xfce"
+#read DE
+echo "Distro (as installed with proot-distro):"
+read PRETTY_NAME
+#am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
+#proot-distro login debian --shared-tmp -- /bin/bash -c  'export PULSE_SERVER=127.0.0.1 && export XDG_RUNTIME_DIR=${TMPDIR} && su - root -c "env DISPLAY=:0 startxfce4"'
+
+
+DE=startxfce4
+#PRETTY_NAME=debian
+
+if [[ "$DE" == "startxfce4" ]]; then
+	DE_NAME="Xfce"
+fi
+
+
+
+QUOTE='"'
+AMPER="'"
+PARAMETERS="export PULSE_SERVER=127.0.0.1 && export XDG_RUNTIME_DIR=${TMPDIR} && su - $USR -c"
+PARA='env DISPLAY=:0'
+DUMMY_START="proot-distro login"
+NATIVE_ARG="--shared-tmp -- /bin/bash -c"
+
+
+
+#if [$DE -eq "xfce"]; then
+#	ACTIVE=startxfce4
+#fi
+
+
+
+echo "Starting $PRETTY_NAME with $DE_NAME"
+
+if [[ "$PRETTY_NAME" == "termux" ]]; then
+	kill -9 $(pgrep -f "termux.x11") 2>/dev/null
+	pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1
+	export XDG_RUNTIME_DIR=${TMPDIR}
+	termux-x11 :0 >/dev/null &
+	export PULSE_SERVER=127.0.0.1
+	env DISPLAY=:0 dbus-launch --exit-with-session xfce4-session & > /dev/null 2>&1
+else
+	echo "$DUMMY_START $PRETTY_NAME $NATIVE_ARG $QUOTE$PARAMETERS $AMPER$PARA $DE$AMPER$QUOTE"
+fi
+exit 0
