@@ -1,42 +1,10 @@
 * It is highly recommended that you read [terminology](./terminology.md) first.
+# Hardware acceleration
 
-# 📚 Index
-* 💻 [Hardware Acceleration in Termux (Proot & Chroot)](#hardware-acceleration-prootandchroot)
-* 💻 [Hardware Acceleration in Termux Native](#hardware-acceleration-termux-native)
-* 🪲 [Troubleshooting and fixes](#troubleshoot)
+Hardware acceleration is already running with the scripts and the distro, however, there is the possibility that you want to run Turnip graphics within Linux
 
-<br>
-<br>  
-
----  
-<br>
-
-# Hardware Acceleration in Termux (Proot & Chroot) <a name=hardware-acceleration-prootandchroot></a>
-> [!NOTE]  
-> I would like to include here all the information I got while I am still researching the subject as the world of hardware acceleration is huge.. If you find any errors  or misconceptions, please comment on Youtube, Telegram or open an issue on this Github
-
-🔥[[Video] Hardware Acceleration Part 1 - What it is, how it is used (VIRGL AND ZINK)](https://www.youtube.com/watch?v=fgGOizUDQpY)  
-🔥[[Video] Hardware Acceleration Part 2 - (VIRGL, ZINK, TURNIP) - how can you use them](https://www.youtube.com/watch?v=07kq4RHbXrE)  
-🔥[[Video] Hardware Acceleration Part 3 - How to run a full Desktop with Hardware Acceleration](https://youtu.be/OiLXkvFoUJQ?feature=shared)
-
-## 1. Install packages
-You need to install the following packages in Termux: 
-```
-pkg install mesa-zink virglrenderer-mesa-zink vulkan-loader-android virglrenderer-android
-```
-
-## 2. Initialize graphical server in Termux: 
-Before login to proot and use hardware acceleration you need to start the graphical server: 
-
-* Vulkan (ZINK):
-```
-MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 GALLIUM_DRIVER=zink ZINK_DESCRIPTORS=lazy virgl_test_server --use-egl-surfaceless --use-gles &
-```
-* OpenGL (VIRGL):
-```
-virgl_test_server_android &
-```
-* [Turnip (Adreno GPU 6XX/7XX compatible only)](https://www.reddit.com/r/termux/comments/19dpqas/proot_linux_only_dri3_patch_mesa_turnip_driver/)
+### NOTE : Turnip works ONLY on Adreno 600 and 700 series GPUs, not Mali, Tegra or PowerVR GPUs, installing Turnip on non-Qualcomm GPUs can leave your install unusable
+* [Turnip](https://www.reddit.com/r/termux/comments/19dpqas/proot_linux_only_dri3_patch_mesa_turnip_driver/)
 It is not needed to initialize any graphical server. Follow the steps described in the reddit post. As as summary:
 
   1. Download Turnip Driver: [mesa-vulkan-kgsl_24.1.0-devel-20240120_arm64.deb](https://drive.google.com/file/d/1f4pLvjDFcBPhViXGIFoRE3Xc8HWoiqG-/view?usp=drive_link)
@@ -50,19 +18,14 @@ sudo dpkg -r mesa-vulkan-drivers:arm64
 ```
 
 
-## 3. In proot distro 
-Run the Desktop with my script (if you do manually instead of using my script, take in to account that you need to share the tmp dir to make it work): 
+## In proot distro 
+While XFCE4 runs apps with GPU acceleration already, there is the possibility you want to run them with Turnip instead: 
 ```
 ./startxfce4_debian.sh
 ```
 
 Once in the Desktop when you want to run a program with hardware acceleration use this before: 
 
-* For VIRGL and ZINK (depending on the graphic server you started in Termux it will use ZINK or VIRGL): 
-```
-GALLIUM_DRIVER=virpipe MESA_GL_VERSION_OVERRIDE=4.0 program
-```
-* For TURNIP: 
 ```
 MESA_LOADER_DRIVER_OVERRIDE=zink TU_DEBUG=noconform program
 ```
